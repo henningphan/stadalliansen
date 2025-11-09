@@ -48,6 +48,7 @@
             {
               packages = [
                 pwp
+                pkgs.firefox
               ];
 
             };
