@@ -1,0 +1,14 @@
+[build-system]
+requires = ["uv_build >= 0.7.22, <0.10.0"]
+build-backend = "uv_build"
+
+[project]
+version = "0.0.1"
+name = "stadcal"
+dependencies = [
+    "apscheduler",
+    "flask",
+    "gunicorn",
+    "icalendar",
+]
+requires-python = ">=3.13"

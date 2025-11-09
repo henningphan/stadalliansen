@@ -36,13 +36,17 @@
 
           # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
           packages.default = pkgs.hello;
+          packages.stadcal = let
+             stadcal = pkgs.python313Packages.callPackage ./derivation.nix {};
+             in  pkgs.python3.withPackages(_: [ stadcal ]);
           devshells.default =
             let
               pwp = pkgs.python313.withPackages (ppkgs: [
+                ppkgs.apscheduler
                 ppkgs.flask
+                ppkgs.gunicorn
                 ppkgs.icalendar
                 ppkgs.selenium
-                ppkgs.apscheduler
               ]);
             in
             {
