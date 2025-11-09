@@ -42,6 +42,7 @@
                 ppkgs.flask
                 ppkgs.icalendar
                 ppkgs.selenium
+                ppkgs.apscheduler
               ]);
             in
             {
