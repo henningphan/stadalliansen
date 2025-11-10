@@ -1,5 +1,5 @@
 from flask import Flask, make_response
-import cal
+from . import cal
 from apscheduler.schedulers.background import BackgroundScheduler
 
 scheduler = BackgroundScheduler()
