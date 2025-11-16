@@ -3,13 +3,9 @@ from . import cal
 from apscheduler.schedulers.background import BackgroundScheduler
 import tomllib
 from . import scraper
-import os
 import logging
 import sys
 logger = logging.getLogger(__name__)
-
-os.environ["SELENIUM_BROWSER_CACHE_DIR"] = "/tmp/selenium"
-os.environ["SE_CACHE_PATH"] = "/tmp/selenium"
 
 def create_app(config_path):
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -22,8 +18,16 @@ def create_app(config_path):
 
     def renew_calendar():
         logger.info("renew calendar")
-        serviceInfos = scraper.get_events_from_source(app.config["USERNAME"], app.config["PASSWORD"])
-        calendar = cal.from_service_info(serviceInfos)
+        serviceInfos = []
+        try:
+            serviceInfos = scraper.get_events_from_source(app.config["USERNAME"], app.config["PASSWORD"])
+        except Exception:
+            logger.exception("get events from source failed")
+        if serviceInfos:
+            calendar = cal.from_service_info(serviceInfos)
+        else:
+            calendar = cal.broken()
+
         app.config["calendar"] = calendar
         logger.info("renew calendar done")
     renew_calendar()
@@ -36,13 +40,10 @@ def create_app(config_path):
     @app.route("/stadalliansen.ics")
     def ics():
         logger.info("Request ics")
-        logger.info(app.config["calendar"])
-
-        response = make_response(app.config["calendar"].to_ical().decode("ascii"), 200)
+        response = make_response(app.config["calendar"].to_ical().decode("utf-8"), 200)
         response.mimetype = "text/calendar"
         return response
 
-    #scheduler.add_job(renew_calendar) # Run once immediately
     scheduler.add_job(renew_calendar, "interval", minutes=60)
     scheduler.start()
     return app

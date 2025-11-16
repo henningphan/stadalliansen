@@ -2,9 +2,10 @@ from icalendar import Calendar, Event
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+tz = ZoneInfo("Europe/Stockholm")
+
 def static_cal():
     """Used for testing"""
-    tz = ZoneInfo("Europe/Stockholm")
     calendar = Calendar()
 
     event = Event()
@@ -43,3 +44,15 @@ def from_service_info(serviceInfos):
         calendar.add_component(event)
     return calendar
 
+def broken():
+    """makes a calendar with event today that says broken to inform user that something has failed"""
+    calendar = Calendar()
+    event = Event()
+    event.add("name", "stadalliansen")
+    event.add("uid", "1")
+    event.add("description", "stadalliansen broken")
+    event.add("summary", "stadalliansen broken")
+    event.add("dtstart", datetime.now().date())
+    event.add("dtend", datetime.now().date())
+    calendar.add_component(event)
+    return calendar
