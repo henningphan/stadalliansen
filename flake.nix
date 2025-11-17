@@ -124,6 +124,7 @@
                     PrivateDevices = "true";
                     ProtectHome = "true";
                     ProtectClock = "true";
+                    CapabilityBoundingSet= "";
                     Restart = "on-failure";
                     ExecStart =
                       let
