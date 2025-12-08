@@ -32,7 +32,6 @@
           # system.
 
           # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
-          packages.default = pkgs.hello;
           packages.stadcal =
             let
               stadcal = pkgs.python313Packages.callPackage ./derivation.nix { };
@@ -121,10 +120,25 @@
                   };
                   serviceConfig = {
                     DynamicUser = "true";
+                    CapabilityBoundingSet = "";
+                    LockPersonality = "true";
+                    NoNewPrivileges = "true";
+                    ProtectControlGroups = "true";
                     PrivateDevices = "true";
-                    ProtectHome = "true";
+                    PrivateTmp = "true";
                     ProtectClock = "true";
-                    CapabilityBoundingSet= "";
+                    ProtectHome = "true";
+                    ProtectHostname = "true";
+                    ProtectKernelLogs = "true";
+                    ProtectKernelTunables = "true";
+                    ProtectProc = "invisible";
+                    RestrictAddressFamilies = [
+                      "AF_INET"
+                      "AF_INET6"
+                    ];
+                    RestrictNamespaces = "true";
+                    RestrictSUIDSGID = "true";
+                    ProtectSystem = "full";
                     Restart = "on-failure";
                     ExecStart =
                       let
